@@ -1,3 +1,6 @@
 import numpy as np
+import pandas as pd
 
-train=np.genfromtxt('C:/Users/joadp/Desktop/Twilight of the Data Gods/csv_files/train.csv', delimiter=',')
+train = pd.read_csv('train.csv')
+A = pd.to_datetime(train['timestamp'],format='%Y-%m-%d %H:%M:%S')
+train['timestamps'] = A
