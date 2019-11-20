@@ -1,0 +1,49 @@
+import numpy as np
+import pandas as pd
+
+df=pd.read_csv('C:/Users/joadp/Desktop/Twilight of the Data Gods/csv_files/train.csv')
+ds=df.values
+building_metadata = pd.read_csv('C:/Users/joadp/Desktop/Twilight of the Data Gods/csv_files/building_metadata.csv')
+b_meta=building_metadata.values
+weather_train = pd.read_csv('C:/Users/joadp/Desktop/Twilight of the Data Gods/csv_files/weather_train.csv')
+weather=weather_train.values
+train=np.empty((20216100,16))
+train[:]=np.nan
+train[:,0]=ds[:,0]
+train[:,1]=ds[:,1]
+H=[]
+D=[]
+M=[]
+
+for i in range(len(ds[:,2])):
+    h=float(ds[:,2][i][11:13])
+    d=float(ds[:,2][i][8:10])
+    m=float(ds[:,2][i][5:7])
+    H.append(h)
+    D.append(d)
+    M.append(m)
+H=np.array(H)
+D=np.array(D)
+M=np.array(M)
+
+train[:,2]=H
+train[:,3]=D
+train[:,4]=M
+train[:,5]=ds[:,3]
+T=pd.DataFrame(train)
+L=[]
+for i in range(20216100):
+    L.append('')    
+T[7]=np.array(L)
+train=T.values
+n=0
+for i in range(20216100):
+    for j in range(1449):
+        n=n+1
+        print(n)
+        if train[:,0][i] == b_meta[:,1][j]:
+            train[:,6][i]=b_meta[:,0][j]
+            train[:,7][i]=b_meta[:,2][j]
+            train[:,8][i]=b_meta[:,3][j]
+            train[:,9][i]=b_meta[:,4][j]
+            train[:,10][i]=b_meta[:,5][j]
