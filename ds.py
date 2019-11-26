@@ -4,33 +4,50 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from datetime import datetime
 
-train = pd.read_csv('train.csv')
-building_metadata = pd.read_csv('building_metadata.csv')
+ds = pd.read_csv('train_inncomplete.csv')
 weather_train = pd.read_csv('weather_train.csv')
+ds = ds.values
 
-A = pd.to_datetime(train['timestamp'],format='%Y-%m-%d %H:%M:%S')
-train['timestamps'] = A
+a = np.empty((20216100,2))
+a[:] = np.nan
+ds = np.hstack((ds,a))
+ 
+a = np.empty((139773,3))
+a[:] = np.nan
+weather_train = np.hstack((weather_train,a))
+H=[]
+D=[]
+M=[]
+for i in range(len(weather_train[:,1])):
+    h=float(weather_train[:,1][i][11:13])
+    d=float(weather_train[:,1][i][8:10])
+    m=float(weather_train[:,1][i][5:7])
+    H.append(h)
+    D.append(d)
+    M.append(m)
+H=np.array(H)
+D=np.array(D)
+M=np.array(M)
 
-dfObj = pd.DataFrame()
-site_id=[]
-primary_use=[]
-square_feet=[]
-year_built=[]
-floor_count=[]
+weather_train[:,9]=H
+weather_train[:,10]=D
+weather_train[:,11]=M
 
-for i in train.index:
-    print(i)
-#    dfObj.append(building_metadata.iloc[train['building_id'][i]])
-    site_id.append(building_metadata['site_id'][ train['building_id'][i]])
-    primary_use.append(building_metadata['primary_use'][ train['building_id'][i]])
-    square_feet.append(building_metadata['square_feet'][ train['building_id'][i]])
-    year_built.append(building_metadata['year_built'][ train['building_id'][i]])
-    floor_count.append(building_metadata['floor_count'][ train['building_id'][i]])
 
-train['site_id']= site_id
-train['primary_use']=primary_use
-train['square_feet']=square_feet
-train['year_built']=year_built
-train['floor_count']=floor_count
-
-del train['building_id']        
+#n=0
+#for i in range(20216100):
+#    for j in range(139733):
+#        n=n+1
+#        print((n/2824856301300) * 100)
+#        if (weather_train[:,0][j] == ds[:,6][i] and 
+#            weather_train[:,9][j] == ds[:,2][i] and
+#            weather_train[:,10][j] == ds[:,3][i] and
+#            weather_train[:,11][j]== ds[:,4][i]):
+#            
+#            ds[:,11][i]=weather_train[:,2][j]
+#            ds[:,12][i]=weather_train[:,3][j]
+#            ds[:,13][i]=weather_train[:,4][j]
+#            ds[:,14][i]=weather_train[:,5][j]
+#            ds[:,15][i]=weather_train[:,6][j]
+#            ds[:,16][i]=weather_train[:,7][j]
+#            ds[:,17][i]=weather_train[:,8][j]       
